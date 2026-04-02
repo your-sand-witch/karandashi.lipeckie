@@ -8,6 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
+
 body {
     font-family: 'Manrope', sans-serif;
     margin: 0;
@@ -61,7 +62,7 @@ body {
     background: rgba(0,0,0,0.04);
 }
 
-/* SCREENS + FADE */
+/* SCREENS */
 .screen {
     display: none;
     opacity: 0;
@@ -91,35 +92,49 @@ p {
     color: #5b6777;
 }
 
-/* BUTTON */
+/* BUTTON (УЛУЧШЕННЫЙ) */
 button {
     margin-top: 20px;
     padding: 14px 30px;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #f4c542;
     cursor: pointer;
-    transition: 0.25s;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
 
-    /* ✨ тень */
-    button {
-    box-shadow: 0 6px 15px rgba(244, 197, 66, 0.3);
+    box-shadow: 0 6px 15px rgba(244, 197, 66, 0.35);
 }
 
-}
-
-/* эффект при наведении */
+/* hover */
 button:hover {
     transform: translateY(-3px);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.22);
+    box-shadow: 0 14px 28px rgba(0,0,0,0.18);
 }
 
-
-button:hover {
-    transform: translateY(-3px);
+/* нажатие */
+button:active {
+    transform: translateY(0px) scale(0.98);
 }
 
-/* 📦 CARDS */
+/* ripple */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 600ms linear;
+    background: rgba(255,255,255,0.6);
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* CARDS */
 .cards {
     display: flex;
     justify-content: center;
@@ -142,7 +157,7 @@ button:hover {
     transform: translateY(-6px);
 }
 
-/* 📞 CONTACTS */
+/* CONTACT */
 .contact-box {
     background: #fffef9;
     max-width: 450px;
@@ -152,7 +167,7 @@ button:hover {
     box-shadow: 0 10px 25px rgba(0,0,0,0.06);
 }
 
-/* 🌙 MODAL BACKDROP */
+/* MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -161,41 +176,34 @@ button:hover {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.55);
-
     justify-content: center;
     align-items: center;
-
     opacity: 0;
     transition: 0.25s ease;
 }
 
-/* активная модалка */
 .modal.show {
     display: flex;
     opacity: 1;
 }
 
-/* 🪟 WINDOW */
 .modal-content {
     background: #fffef9;
     padding: 30px;
     border-radius: 14px;
     width: 360px;
     text-align: center;
-
     transform: scale(0.85);
     opacity: 0;
     transition: 0.25s ease;
     box-shadow: 0 20px 50px rgba(0,0,0,0.25);
 }
 
-/* анимация появления окна */
 .modal.show .modal-content {
     transform: scale(1);
     opacity: 1;
 }
 
-/* INPUT */
 input {
     width: 90%;
     padding: 10px;
@@ -203,6 +211,7 @@ input {
     border-radius: 8px;
     border: 1px solid #ddd;
 }
+
 </style>
 </head>
 
@@ -222,13 +231,12 @@ input {
     </div>
 </div>
 
-<!-- HOME -->
 <div id="home" class="screen active">
 
     <h1>Липецкие карандаши</h1>
     <p>Качественные карандаши для учебы, творчества и профессионального рисования</p>
 
-    <button onclick="openModal()">Связаться</button>
+    <button onclick="openModal(event)">Связаться</button>
 
     <div class="cards">
         <div class="card">
@@ -256,17 +264,14 @@ input {
 
 </div>
 
-<!-- ABOUT -->
 <div id="about" class="screen">
     <h1>Кто мы...</h1>
 </div>
 
-<!-- PRODUCTS -->
 <div id="products" class="screen">
     <h1>Карандаши.</h1>
 </div>
 
-<!-- CONTACTS -->
 <div id="contacts" class="screen">
     <h1>Контакты</h1>
 </div>
@@ -287,16 +292,11 @@ input {
 
 /* страницы */
 function show(id) {
-    document.querySelectorAll('.screen').forEach(s => {
-        s.classList.remove('active');
-    });
-
-    setTimeout(() => {
-        document.getElementById(id).classList.add('active');
-    }, 120);
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    setTimeout(() => document.getElementById(id).classList.add('active'), 120);
 }
 
-/* логотип печатает */
+/* логотип */
 let text = " мы делаем карандаши ✏️";
 let i = 0;
 let interval;
@@ -306,11 +306,9 @@ function writeText() {
     i = 0;
     const hint = document.getElementById("hint");
     hint.textContent = "";
-    hint.style.width = "0px";
 
     interval = setInterval(() => {
         hint.textContent += text[i];
-        hint.style.width = hint.scrollWidth + "px";
         i++;
         if (i >= text.length) clearInterval(interval);
     }, 60);
@@ -318,33 +316,47 @@ function writeText() {
 
 function clearText() {
     document.getElementById("hint").textContent = "";
-    document.getElementById("hint").style.width = "0px";
     clearInterval(interval);
 }
 
-/* 🌙 MODAL OPEN */
-function openModal() {
+/* modal */
+function openModal(e) {
     const modal = document.getElementById("modal");
     modal.classList.add("show");
+    createRipple(e);
 }
 
-/* ❌ CLOSE */
 function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.classList.remove("show");
+    document.getElementById("modal").classList.remove("show");
 }
 
-/* 🖱 click outside */
 function outsideClose(e) {
     closeModal();
 }
 
-/* ⌨ ESC */
-document.addEventListener("keydown", function(e) {
-    if (e.key === "Escape") {
-        closeModal();
-    }
+/* ESC */
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeModal();
 });
+
+/* ripple эффект */
+function createRipple(e) {
+    const button = e.currentTarget;
+    const circle = document.createElement("span");
+    const rect = button.getBoundingClientRect();
+
+    circle.classList.add("ripple");
+
+    const size = Math.max(rect.width, rect.height);
+    circle.style.width = circle.style.height = size + "px";
+
+    circle.style.left = e.clientX - rect.left - size / 2 + "px";
+    circle.style.top = e.clientY - rect.top - size / 2 + "px";
+
+    button.appendChild(circle);
+
+    setTimeout(() => circle.remove(), 600);
+}
 
 </script>
 
