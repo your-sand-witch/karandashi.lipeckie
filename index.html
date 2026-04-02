@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Липецкие карандаши</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    font-family: 'Manrope', sans-serif;
+    margin: 0;
+    background: url("https://www.transparenttextures.com/patterns/paper-fibers.png"), #fdfbf7;
+    color: #2f3b4a;
+}
+
+/* HEADER */
+.header {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 40px;
+    background: rgba(255,255,255,0.92);
+    border-bottom: 1px solid #eee;
+}
+
+.logo {
+    font-family: 'Marck Script', cursive;
+    font-size: 28px;
+    cursor: pointer;
+    position: relative;
+}
+
+.logo-hint {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    font-size: 14px;
+    color: #666;
+    white-space: nowrap;
+    border-right: 2px solid #666;
+    overflow: hidden;
+    width: 0;
+}
+
+/* NAV */
+.nav a {
+    margin-left: 18px;
+    text-decoration: none;
+    color: #2f3b4a;
+    padding: 5px 8px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.nav a:hover {
+    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+    transform: translateY(-2px);
+    background: rgba(0,0,0,0.04);
+}
+
+/* SCREENS + FADE */
+.screen {
+    display: none;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: 0.35s ease;
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.screen.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* TITLE */
+h1 {
+    font-family: 'Marck Script', cursive;
+    font-size: 60px;
+}
+
+/* TEXT */
+p {
+    max-width: 700px;
+    margin: auto;
+    font-size: 18px;
+    color: #5b6777;
+}
+
+/* BUTTON */
+button {
+    margin-top: 20px;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 10px;
+    background: #f4c542;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-3px);
+}
+
+/* 📦 CARDS */
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+}
+
+.card {
+    background: #fffef9;
+    width: 260px;
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    transition: 0.25s;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+}
+
+/* 📞 CONTACTS */
+.contact-box {
+    background: #fffef9;
+    max-width: 450px;
+    margin: 50px auto 0;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+/* 🌙 MODAL BACKDROP */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.55);
+
+    justify-content: center;
+    align-items: center;
+
+    opacity: 0;
+    transition: 0.25s ease;
+}
+
+/* активная модалка */
+.modal.show {
+    display: flex;
+    opacity: 1;
+}
+
+/* 🪟 WINDOW */
+.modal-content {
+    background: #fffef9;
+    padding: 30px;
+    border-radius: 14px;
+    width: 360px;
+    text-align: center;
+
+    transform: scale(0.85);
+    opacity: 0;
+    transition: 0.25s ease;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+}
+
+/* анимация появления окна */
+.modal.show .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* INPUT */
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <div class="logo" onmouseenter="writeText()" onmouseleave="clearText()">
+        ✏️ Карандаши
+        <div class="logo-hint" id="hint"></div>
+    </div>
+
+    <div class="nav">
+        <a onclick="show('home')">Главная</a>
+        <a onclick="show('about')">О нас</a>
+        <a onclick="show('products')">Продукция</a>
+        <a onclick="show('contacts')">Контакты</a>
+    </div>
+</div>
+
+<!-- HOME -->
+<div id="home" class="screen active">
+
+    <h1>Липецкие карандаши</h1>
+    <p>Качественные карандаши для учебы, творчества и профессионального рисования</p>
+
+    <button onclick="openModal()">Связаться</button>
+
+    <div class="cards">
+        <div class="card">
+            <h3>Продукция</h3>
+            <p>Чернографитные и цветные карандаши</p>
+        </div>
+
+        <div class="card">
+            <h3>Преимущества</h3>
+            <p>Экологичные материалы и долговечность</p>
+        </div>
+
+        <div class="card">
+            <h3>Качество</h3>
+            <p>Подходит для школы и художников</p>
+        </div>
+    </div>
+
+    <div class="contact-box">
+        <h2>Контакты</h2>
+        <p>📞 +7 900 000 00 00</p>
+        <p>📧 info@pencils.ru</p>
+        <p>📍 Липецк, Россия</p>
+    </div>
+
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="screen">
+    <h1>Кто мы...</h1>
+</div>
+
+<!-- PRODUCTS -->
+<div id="products" class="screen">
+    <h1>Карандаши.</h1>
+</div>
+
+<!-- CONTACTS -->
+<div id="contacts" class="screen">
+    <h1>Контакты</h1>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" onclick="outsideClose(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h2>Связаться</h2>
+        <input placeholder="Имя">
+        <input placeholder="Телефон">
+
+        <button>Отправить</button>
+        <button onclick="closeModal()" style="background:#ccc;margin-top:10px;">Закрыть</button>
+    </div>
+</div>
+
+<script>
+
+/* страницы */
+function show(id) {
+    document.querySelectorAll('.screen').forEach(s => {
+        s.classList.remove('active');
+    });
+
+    setTimeout(() => {
+        document.getElementById(id).classList.add('active');
+    }, 120);
+}
+
+/* логотип печатает */
+let text = " мы делаем карандаши ✏️";
+let i = 0;
+let interval;
+
+function writeText() {
+    clearInterval(interval);
+    i = 0;
+    const hint = document.getElementById("hint");
+    hint.textContent = "";
+    hint.style.width = "0px";
+
+    interval = setInterval(() => {
+        hint.textContent += text[i];
+        hint.style.width = hint.scrollWidth + "px";
+        i++;
+        if (i >= text.length) clearInterval(interval);
+    }, 60);
+}
+
+function clearText() {
+    document.getElementById("hint").textContent = "";
+    document.getElementById("hint").style.width = "0px";
+    clearInterval(interval);
+}
+
+/* 🌙 MODAL OPEN */
+function openModal() {
+    const modal = document.getElementById("modal");
+    modal.classList.add("show");
+}
+
+/* ❌ CLOSE */
+function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.classList.remove("show");
+}
+
+/* 🖱 click outside */
+function outsideClose(e) {
+    closeModal();
+}
+
+/* ⌨ ESC */
+document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+        closeModal();
+    }
+});
+
+</script>
+
+</body>
+</html>
