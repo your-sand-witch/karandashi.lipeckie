@@ -2,74 +2,239 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Липецкие карандаши — чернографитные и цветные карандаши для школы, студии и творчества. Качество и спокойная эстетика.">
+<meta name="theme-color" content="#faf7f2">
 <title>Липецкие карандаши</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Marck+Script&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+:root {
+    --ink: #1a2330;
+    --ink-soft: #3d4a5c;
+    --muted: #6b7684;
+    --cream: #faf7f2;
+    --cream-deep: #f0ebe3;
+    --paper: #fdfbf7;
+    --accent: #b8956a;
+    --accent-hover: #a67f52;
+    --accent-soft: rgba(184, 149, 106, 0.14);
+    --line: rgba(26, 35, 48, 0.08);
+    --shadow-sm: 0 2px 8px rgba(26, 35, 48, 0.06);
+    --shadow-md: 0 12px 40px rgba(26, 35, 48, 0.08);
+    --shadow-lg: 0 24px 64px rgba(26, 35, 48, 0.12);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --font-ui: 'Manrope', system-ui, sans-serif;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+::selection {
+    background: var(--accent-soft);
+    color: var(--ink);
+}
 
 body {
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--font-ui);
     margin: 0;
-    background: url("https://www.transparenttextures.com/patterns/paper-fibers.png"), #fdfbf7;
-    color: #2f3b4a;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+        linear-gradient(180deg, var(--paper) 0%, var(--cream) 55%, var(--cream-deep) 100%),
+        url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+    -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 0;
+}
+
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+main {
+    flex: 1;
 }
 
 /* HEADER */
 .header {
     position: sticky;
+    z-index: 100;
     top: 0;
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 18px 40px;
-    background: rgba(255,255,255,0.92);
-    border-bottom: 1px solid #eee;
+    gap: 16px;
+    padding: 18px clamp(20px, 4vw, 48px);
+    background: rgba(253, 251, 247, 0.82);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    border-bottom: 1px solid var(--line);
 }
 
 .logo {
     font-family: 'Marck Script', cursive;
-    font-size: 28px;
+    font-size: clamp(26px, 4vw, 32px);
     cursor: pointer;
     position: relative;
+    color: var(--ink);
+    user-select: none;
+    transition: opacity 0.2s ease;
+}
+
+.logo-word-wrap {
+    display: inline-block;
+}
+
+.logo-word {
+    display: inline;
+}
+
+.logo-ch {
+    display: inline-block;
+    transform-origin: 50% 85%;
+}
+
+.logo:hover .logo-ch {
+    animation:
+        logoVanish 0.42s cubic-bezier(0.45, 0, 0.2, 1) forwards,
+        logoWrite 0.72s cubic-bezier(0.2, 0.85, 0.22, 1) forwards;
+    animation-delay: 0s, var(--w, 0.5s);
+}
+
+@keyframes logoVanish {
+    to {
+        opacity: 0;
+        transform: translateY(12px) scale(0.88);
+        filter: blur(6px);
+    }
+}
+
+@keyframes logoWrite {
+    from {
+        opacity: 0;
+        transform: translate(calc(var(--dx, 0px) + 2px), 18px) rotate(calc(var(--r, 0deg) * 1.4)) scale(1.12);
+        filter: blur(5px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        filter: blur(0);
+    }
 }
 
 .logo-hint {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 2px);
     left: 0;
-    font-size: 14px;
-    color: #666;
+    padding-top: 2px;
     white-space: nowrap;
-    border-right: 2px solid #666;
-    overflow: hidden;
-    width: 0;
+    pointer-events: none;
+    font-family: 'Marck Script', cursive;
+    font-size: clamp(16px, 2.1vw, 21px);
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink-soft);
 }
 
-/* NAV */
+.hint-ch {
+    display: inline-block;
+    opacity: 0;
+    transform-origin: 50% 85%;
+}
+
+.logo:hover .hint-ch {
+    animation: hintWrite 0.58s cubic-bezier(0.18, 0.82, 0.22, 1) forwards;
+    animation-delay: calc(1.05s + var(--i) * 0.041s);
+}
+
+@keyframes hintWrite {
+    from {
+        opacity: 0;
+        transform: translate(calc(var(--dx, 0px) + 1px), 14px) rotate(calc(var(--r, 0deg) * 1.3)) scale(1.1);
+        filter: blur(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        filter: blur(0);
+    }
+}
+
+.hint-ch--sp {
+    min-width: 0.28em;
+}
+
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 4px;
+    justify-content: flex-end;
+}
+
 .nav a {
-    margin-left: 18px;
+    margin: 0;
     text-decoration: none;
-    color: #2f3b4a;
-    padding: 5px 8px;
-    border-radius: 6px;
-    transition: 0.2s;
+    color: var(--ink-soft);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    position: relative;
 }
 
 .nav a:hover {
-    box-shadow: 0 6px 12px rgba(0,0,0,0.12);
-    transform: translateY(-2px);
-    background: rgba(0,0,0,0.04);
+    color: var(--ink);
+    background: var(--accent-soft);
 }
 
-/* SCREENS */
+.nav a.nav-active {
+    color: var(--ink);
+    background: rgba(26, 35, 48, 0.06);
+    box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.nav a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
 .screen {
     display: none;
     opacity: 0;
-    transform: translateY(10px);
-    transition: 0.35s ease;
-    padding: 70px 20px;
+    transform: translateY(20px);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
+    padding: clamp(40px, 8vw, 88px) clamp(20px, 4vw, 48px) 48px;
     text-align: center;
+    max-width: 1120px;
+    margin: 0 auto;
 }
 
 .screen.active {
@@ -78,108 +243,623 @@ body {
     transform: translateY(0);
 }
 
-/* TITLE */
+.hero-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 16px;
+}
+
 h1 {
-    font-family: 'Marck Script', cursive;
-    font-size: 60px;
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6.5vw, 68px);
+    font-weight: 600;
+    line-height: 1.08;
+    margin: 0 0 20px;
+    color: var(--ink);
+    letter-spacing: -0.03em;
 }
 
-/* TEXT */
-p {
-    max-width: 700px;
-    margin: auto;
+h2 {
+    font-family: var(--font-display);
+    font-size: clamp(26px, 3.5vw, 36px);
+    font-weight: 600;
+    margin: 0 0 16px;
+    color: var(--ink);
+}
+
+h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 12px;
+    color: var(--ink);
+}
+
+.lead {
+    max-width: 560px;
+    margin: 0 auto 32px;
     font-size: 18px;
-    color: #5b6777;
+    color: var(--muted);
+    font-weight: 400;
 }
 
-/* BUTTON (УЛУЧШЕННЫЙ) */
-button {
-    margin-top: 20px;
-    padding: 14px 30px;
-    border: none;
-    border-radius: 12px;
-    background: #f4c542;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    position: relative;
-    overflow: hidden;
-
-    box-shadow: 0 6px 15px rgba(244, 197, 66, 0.35);
+.screen p:not(.lead):not(.card p):not(.contact-box p):not(.quote-author):not(.footer p) {
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* hover */
-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+p {
+    color: var(--muted);
 }
 
-/* нажатие */
-button:active {
-    transform: translateY(0px) scale(0.98);
+.section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 20px;
 }
 
-/* ripple */
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple 600ms linear;
-    background: rgba(255,255,255,0.6);
+.hero-wrap {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    align-items: center;
+    text-align: left;
+    margin-bottom: clamp(48px, 10vw, 88px);
+    padding: clamp(28px, 5vw, 48px);
+    border-radius: calc(var(--radius) + 8px);
+    background:
+        linear-gradient(135deg, rgba(255, 254, 249, 0.95) 0%, rgba(250, 247, 242, 0.6) 100%);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
 }
 
-@keyframes ripple {
-    to {
-        transform: scale(4);
-        opacity: 0;
+@media (min-width: 900px) {
+    .hero-wrap {
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+        text-align: left;
+    }
+    .hero-wrap .hero-copy {
+        text-align: left;
+    }
+    .hero-wrap .lead {
+        margin-left: 0;
     }
 }
 
-/* CARDS */
+.hero-copy .hero-eyebrow {
+    margin-bottom: 12px;
+}
+
+.hero-copy h1 {
+    margin-bottom: 16px;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.hero-art {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+}
+
+.hero-art svg {
+    width: min(100%, 320px);
+    height: auto;
+    filter: drop-shadow(0 20px 40px rgba(26, 35, 48, 0.12));
+    overflow: visible;
+}
+
+.hero-deco-graph {
+    transform-origin: 160px 135px;
+    animation: heroGraphFloat 20s ease-in-out infinite;
+}
+
+.hero-deco-ring {
+    animation: heroRingPulse 16s ease-in-out infinite;
+}
+
+@keyframes heroGraphFloat {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(0, -5px); }
+}
+
+@keyframes heroRingPulse {
+    0%, 100% { opacity: 0.35; transform: scale(1); }
+    50% { opacity: 0.55; transform: scale(1.02); }
+}
+
+.hero-line {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin-bottom: 20px;
+}
+
+@media (min-width: 900px) {
+    .hero-line {
+        margin-left: 0;
+    }
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    max-width: 720px;
+    margin: 0 auto 64px;
+}
+
+.stat {
+    padding: 28px 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: rgba(255, 254, 249, 0.65);
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-value {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 44px);
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+@media (max-width: 600px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+.quote-block {
+    max-width: 640px;
+    margin: 0 auto 64px;
+    padding: 40px 32px;
+    border-left: 3px solid var(--accent);
+    background: linear-gradient(90deg, var(--accent-soft), transparent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    text-align: left;
+}
+
+.quote-block blockquote {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3.5vw, 28px);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.45;
+    color: var(--ink-soft);
+}
+
+.quote-author {
+    margin: 20px 0 0;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+.process {
+    margin-bottom: 56px;
+}
+
+.process-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    max-width: 920px;
+    margin: 32px auto 0;
+    text-align: left;
+}
+
+.process-step {
+    padding: 24px 22px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: rgba(255, 254, 249, 0.5);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.process-step:hover {
+    border-color: rgba(184, 149, 106, 0.35);
+    box-shadow: var(--shadow-sm);
+}
+
+.process-step h4 {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 10px;
+}
+
+.process-step p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+button {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0;
+    padding: 16px 32px;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(165deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    box-shadow: 0 8px 24px rgba(166, 127, 82, 0.35);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(166, 127, 82, 0.42);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 3px;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    box-shadow: none;
+}
+
+.btn-ghost:hover {
+    background: rgba(26, 35, 48, 0.04);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    box-shadow: none;
+    margin-top: 12px;
+}
+
+.btn-secondary:hover {
+    background: rgba(26, 35, 48, 0.04);
+    box-shadow: var(--shadow-sm);
+}
+
 .cards {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 24px;
     flex-wrap: wrap;
-    margin-top: 40px;
+    margin-top: 8px;
 }
 
 .card {
-    background: #fffef9;
-    width: 260px;
-    padding: 25px;
-    border-radius: 14px;
-    border: 1px solid rgba(0,0,0,0.06);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
-    transition: 0.25s;
+    background: rgba(255, 254, 249, 0.88);
+    width: min(100%, 300px);
+    padding: 32px 28px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.35s var(--ease-out), box-shadow 0.35s ease;
+    text-align: left;
 }
 
 .card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
 }
 
-/* CONTACT */
+.card-num {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 600;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent) 0%, #8b6f4a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+}
+
+.card p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
 .contact-box {
-    background: #fffef9;
-    max-width: 450px;
-    margin: 50px auto 0;
-    padding: 25px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    background: rgba(255, 254, 249, 0.92);
+    max-width: 480px;
+    margin: 48px auto 0;
+    padding: 40px 36px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
 }
 
-/* MODAL */
+.contact-box h2 {
+    margin-bottom: 20px;
+}
+
+.contact-box p {
+    margin: 12px 0;
+    font-size: 16px;
+}
+
+.divider {
+    height: 1px;
+    background: var(--line);
+    margin: 24px 0;
+    max-width: 72px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-block {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.page-block p {
+    margin: 0 0 1em;
+}
+
+.pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 28px 0 36px;
+}
+
+.pill {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255, 254, 249, 0.7);
+    color: var(--ink-soft);
+}
+
+.split-feature {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 900px;
+    margin: 40px auto 0;
+    text-align: left;
+    align-items: start;
+}
+
+@media (min-width: 768px) {
+    .split-feature {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.feature-frame {
+    aspect-ratio: 4/3;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background:
+        linear-gradient(145deg, var(--cream-deep) 0%, var(--paper) 45%, var(--cream) 100%);
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-frame::after {
+    content: "";
+    position: absolute;
+    inset: 12px;
+    border: 1px solid rgba(184, 149, 106, 0.25);
+    border-radius: calc(var(--radius) - 8px);
+    pointer-events: none;
+}
+
+.spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.spec-table th,
+.spec-table td {
+    padding: 14px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+}
+
+.spec-table th {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 38%;
+}
+
+.spec-table tr:last-child th,
+.spec-table tr:last-child td {
+    border-bottom: none;
+}
+
+.site-footer {
+    margin-top: auto;
+    padding: 48px clamp(20px, 4vw, 48px) 32px;
+    border-top: 1px solid var(--line);
+    background: rgba(253, 251, 247, 0.65);
+    backdrop-filter: blur(8px);
+}
+
+.footer-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 36px;
+}
+
+@media (min-width: 768px) {
+    .footer-inner {
+        grid-template-columns: 1.2fr 1fr 1fr;
+        gap: 40px;
+    }
+}
+
+.footer-brand {
+    font-family: 'Marck Script', cursive;
+    font-size: 26px;
+    color: var(--ink);
+    margin-bottom: 10px;
+}
+
+.footer-tag {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.55;
+    max-width: 280px;
+    margin: 0;
+}
+
+.footer-col h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 0 0 16px;
+}
+
+.footer-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.footer-links a {
+    display: block;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    padding: 6px 0;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: var(--accent);
+}
+
+.footer-social {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.footer-social a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.footer-social a:hover {
+    background: var(--accent-soft);
+    border-color: rgba(184, 149, 106, 0.4);
+    color: var(--ink);
+}
+
+.footer-bottom {
+    max-width: 1120px;
+    margin: 36px auto 0;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.footer-bottom a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.footer-bottom a:hover {
+    color: var(--accent);
+}
+
 .modal {
     display: none;
     position: fixed;
+    z-index: 200;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.55);
+    background: rgba(26, 35, 48, 0.48);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     justify-content: center;
     align-items: center;
+    padding: 24px;
     opacity: 0;
-    transition: 0.25s ease;
+    transition: opacity 0.35s ease;
 }
 
 .modal.show {
@@ -188,176 +868,403 @@ button:active {
 }
 
 .modal-content {
-    background: #fffef9;
-    padding: 30px;
-    border-radius: 14px;
-    width: 360px;
+    background: var(--cream);
+    padding: 40px 36px;
+    border-radius: var(--radius);
+    width: min(100%, 400px);
     text-align: center;
-    transform: scale(0.85);
+    border: 1px solid var(--line);
+    transform: scale(0.94) translateY(16px);
     opacity: 0;
-    transition: 0.25s ease;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    transition: transform 0.4s var(--ease-out), opacity 0.4s ease;
+    box-shadow: var(--shadow-lg);
 }
 
 .modal.show .modal-content {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
     opacity: 1;
 }
 
-input {
-    width: 90%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+.modal-content h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
 }
 
+.modal-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 24px;
+}
+
+input {
+    width: 100%;
+    max-width: 100%;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: #fff;
+    font-family: var(--font-ui);
+    font-size: 15px;
+    color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input::placeholder {
+    color: #9aa3ad;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .screen {
+        transition: none;
+    }
+    .modal-content {
+        transition: none;
+    }
+    .hero-deco-graph,
+    .hero-deco-ring {
+        animation: none !important;
+    }
+    .logo:hover .logo-ch,
+    .logo:hover .hint-ch {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+    }
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    <div class="logo" onmouseenter="writeText()" onmouseleave="clearText()">
-        ✏️ Карандаши
-        <div class="logo-hint" id="hint"></div>
+<header class="header">
+    <div class="logo" role="button" tabindex="0" aria-label="Карандаши — на главную" onclick="show('home')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();show('home');}">
+        <span class="logo-word-wrap">
+            <span class="logo-word" aria-hidden="true">
+                <span class="logo-ch" style="--w:0.48s;--r:-2.1deg;--dx:-2px">К</span><span class="logo-ch" style="--w:0.53s;--r:1.3deg;--dx:1px">а</span><span class="logo-ch" style="--w:0.59s;--r:-1.6deg;--dx:-1px">р</span><span class="logo-ch" style="--w:0.64s;--r:0.9deg;--dx:2px">а</span><span class="logo-ch" style="--w:0.71s;--r:-1.1deg;--dx:-2px">н</span><span class="logo-ch" style="--w:0.77s;--r:1.4deg;--dx:1px">д</span><span class="logo-ch" style="--w:0.84s;--r:-0.7deg">а</span><span class="logo-ch" style="--w:0.91s;--r:1.9deg;--dx:2px">ш</span><span class="logo-ch" style="--w:0.98s;--r:-1.3deg;--dx:-1px">и</span>
+            </span>
+        </span>
+        <div class="logo-hint" aria-hidden="true">
+            <span class="hint-ch hint-ch--sp" style="--i:0;--r:0.5deg;--dx:0">&nbsp;</span><span class="hint-ch" style="--i:1;--r:-1.2deg;--dx:-1px">—</span><span class="hint-ch hint-ch--sp" style="--i:2;--r:0deg">&nbsp;</span><span class="hint-ch" style="--i:3;--r:1deg;--dx:1px">д</span><span class="hint-ch" style="--i:4;--r:-0.8deg">е</span><span class="hint-ch" style="--i:5;--r:1.4deg;--dx:-1px">л</span><span class="hint-ch" style="--i:6;--r:-1deg">а</span><span class="hint-ch" style="--i:7;--r:0.6deg;--dx:2px">е</span><span class="hint-ch" style="--i:8;--r:-1.3deg">м</span><span class="hint-ch hint-ch--sp" style="--i:9">&nbsp;</span><span class="hint-ch" style="--i:10;--r:1.1deg;--dx:-2px">к</span><span class="hint-ch" style="--i:11;--r:-0.9deg">а</span><span class="hint-ch" style="--i:12;--r:1.6deg;--dx:1px">р</span><span class="hint-ch" style="--i:13;--r:-1.1deg">а</span><span class="hint-ch" style="--i:14;--r:0.7deg;--dx:-1px">н</span><span class="hint-ch" style="--i:15;--r:-1.4deg">д</span><span class="hint-ch" style="--i:16;--r:1deg;--dx:2px">а</span><span class="hint-ch" style="--i:17;--r:-1.7deg">ш</span><span class="hint-ch" style="--i:18;--r:0.8deg">и</span><span class="hint-ch hint-ch--sp" style="--i:19">&nbsp;</span><span class="hint-ch" style="--i:20;--r:-1deg;--dx:1px">с</span><span class="hint-ch hint-ch--sp" style="--i:21">&nbsp;</span><span class="hint-ch" style="--i:22;--r:1.2deg;--dx:-2px">д</span><span class="hint-ch" style="--i:23;--r:-0.6deg">у</span><span class="hint-ch" style="--i:24;--r:1.5deg;--dx:1px">ш</span><span class="hint-ch" style="--i:25;--r:-1deg">о</span><span class="hint-ch" style="--i:26;--r:0.9deg;--dx:-1px">й</span>
+        </div>
     </div>
 
-    <div class="nav">
-        <a onclick="show('home')">Главная</a>
-        <a onclick="show('about')">О нас</a>
-        <a onclick="show('products')">Продукция</a>
-        <a onclick="show('contacts')">Контакты</a>
-    </div>
-</div>
+    <nav class="nav" aria-label="Основное меню">
+        <a href="#" class="nav-active" data-screen="home" onclick="show('home'); return false;">Главная</a>
+        <a href="#" data-screen="about" onclick="show('about'); return false;">О нас</a>
+        <a href="#" data-screen="products" onclick="show('products'); return false;">Продукция</a>
+        <a href="#" data-screen="contacts" onclick="show('contacts'); return false;">Контакты</a>
+    </nav>
+</header>
+
+<main>
 
 <div id="home" class="screen active">
+    <div class="hero-wrap">
+        <div class="hero-copy">
+            <div class="hero-line" aria-hidden="true"></div>
+            <p class="hero-eyebrow">Липецк · мануфактура</p>
+            <h1>Липецкие карандаши</h1>
+            <p class="lead">Для учёбы, эскиза и полноценной цветовой работы — сдержанная эстетика, предсказуемый грифель и тактильное удовольствие от дерева.</p>
+            <div class="hero-actions">
+                <button type="button" onclick="openModal()">Связаться</button>
+                <button type="button" class="btn-ghost" onclick="show('products')">Смотреть линейки</button>
+            </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+            <svg viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
+                <title>Графитовые линии</title>
+                <defs>
+                    <linearGradient id="graphiteLine" x1="0%" y1="50%" x2="100%" y2="50%" gradientUnits="objectBoundingBox">
+                        <stop offset="0%" stop-color="#b8956a" stop-opacity="0.95"/>
+                        <stop offset="0.45" stop-color="#5c5348" stop-opacity="0.75"/>
+                        <stop offset="1" stop-color="#2a2624" stop-opacity="0.55"/>
+                    </linearGradient>
+                    <linearGradient id="paperHalo" x1="0.5" y1="0" x2="0.5" y2="1">
+                        <stop offset="0%" stop-color="#faf7f2" stop-opacity="0"/>
+                        <stop offset="1" stop-color="#e8dfd4" stop-opacity="0.35"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="160" cy="130" r="120" fill="url(#paperHalo)"/>
+                <g class="hero-deco-ring">
+                    <circle cx="160" cy="130" r="92" stroke="url(#graphiteLine)" stroke-width="0.85" opacity="0.4"/>
+                    <circle cx="160" cy="130" r="78" stroke="#b8956a" stroke-width="0.4" opacity="0.22"/>
+                </g>
+                <g class="hero-deco-graph" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M 36 175 C 88 95 142 210 198 148 C 238 110 278 195 312 168" stroke="url(#graphiteLine)" stroke-width="1.35"/>
+                    <path d="M 58 205 C 118 145 168 235 228 168 C 268 135 302 185 318 165" stroke="#8b7355" stroke-width="0.7" opacity="0.42"/>
+                    <path d="M 95 72 C 145 48 188 88 232 58" stroke="#b8956a" stroke-width="0.55" opacity="0.38"/>
+                    <path d="M 125 238 L 132 248 M 198 52 L 205 58 M 268 218 L 275 225" stroke="#1a2330" stroke-width="1.2" opacity="0.12"/>
+                </g>
+            </svg>
+        </div>
+    </div>
 
-    <h1>Липецкие карандаши</h1>
-    <p>Качественные карандаши для учебы, творчества и профессионального рисования</p>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-value">40+</div>
+            <div class="stat-label">лет опыта</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">120</div>
+            <div class="stat-label">оттенков в палитре</div>
+        </div>
+        <div class="stat">
+            <div class="stat-value">∞</div>
+            <div class="stat-label">штрихов на листе</div>
+        </div>
+    </div>
 
-    <button onclick="openModal(event)">Связаться</button>
+    <p class="section-label">Философия бренда</p>
+    <div class="quote-block">
+        <blockquote>Хороший карандаш не кричит о себе — он исчезает между рукой и бумагой, оставляя только линию.</blockquote>
+        <p class="quote-author">Наша мастерская · Липецк</p>
+    </div>
 
+    <p class="section-label">От идеи до партии</p>
+    <div class="process">
+        <div class="process-grid">
+            <div class="process-step">
+                <h4>01 · Сырьё</h4>
+                <p>Отбор древесины и пигментов с контролем влажности и однородности партий.</p>
+            </div>
+            <div class="process-step">
+                <h4>02 · Грифель</h4>
+                <p>Смешивание графита и глины по рецептурам с фиксированной твёрдостью.</p>
+            </div>
+            <div class="process-step">
+                <h4>03 · Сборка</h4>
+                <p>Точная посадка стержня, склеивание и шлифовка корпуса без перекосов.</p>
+            </div>
+            <div class="process-step">
+                <h4>04 · Контроль</h4>
+                <p>Выборочные тесты на бумаге разной плотности перед отгрузкой.</p>
+            </div>
+        </div>
+    </div>
+
+    <p class="section-label">Почему нам доверяют</p>
     <div class="cards">
         <div class="card">
+            <div class="card-num">01</div>
             <h3>Продукция</h3>
-            <p>Чернографитные и цветные карандаши</p>
+            <p>Чернографитные и цветные линейки — от школьного набора до студийного формата.</p>
         </div>
-
         <div class="card">
-            <h3>Преимущества</h3>
-            <p>Экологичные материалы и долговечность</p>
+            <div class="card-num">02</div>
+            <h3>Материалы</h3>
+            <p>Экологичные составы грифеля, устойчивость к лому и комфорт заточки.</p>
         </div>
-
         <div class="card">
+            <div class="card-num">03</div>
             <h3>Качество</h3>
-            <p>Подходит для школы и художников</p>
+            <p>Стабильный штрих по всей длине стержня — важно и в черчении, и в скетче.</p>
         </div>
     </div>
 
     <div class="contact-box">
         <h2>Контакты</h2>
-        <p>📞 +7 900 000 00 00</p>
-        <p>📧 info@pencils.ru</p>
-        <p>📍 Липецк, Россия</p>
+        <div class="divider"></div>
+        <p>+7 900 000 00 00</p>
+        <p>info@pencils.ru</p>
+        <p>Липецк, Россия</p>
     </div>
-
 </div>
 
 <div id="about" class="screen">
-    <h1>Кто мы...</h1>
+    <p class="hero-eyebrow">О бренде</p>
+    <h1>Кто мы</h1>
+    <p class="lead" style="text-align: center;">Традиции производства и современные стандарты безопасности — в одном карандаше.</p>
+
+    <div class="pill-row">
+        <span class="pill">Сертификация</span>
+        <span class="pill">Собственное производство</span>
+        <span class="pill">B2B и розница</span>
+    </div>
+
+    <div class="split-feature">
+        <div class="feature-frame" role="presentation"></div>
+        <div class="page-block" style="margin: 0;">
+            <p>Инженеры и технологи следят за твёрдостью грифеля и однородностью цвета в каждой партии. Мы измеряем не только параметры на бумаге, но и баланс корпуса, текстуру дерева, удобство хвата.</p>
+            <p>Школы, студии и сети ценят предсказуемость: когда ученик берёт новый карандаш из той же коробки, поведение штриха остаётся узнаваемым.</p>
+            <p style="margin-top: 24px;"><button type="button" class="btn-ghost" onclick="openModal()">Запросить презентацию</button></p>
+        </div>
+    </div>
 </div>
 
 <div id="products" class="screen">
-    <h1>Карандаши.</h1>
+    <p class="hero-eyebrow">Каталог</p>
+    <h1>Продукция</h1>
+    <p class="lead">Линейки для черчения, эскиза и полноценной цветовой работы — подберите формат под задачу.</p>
+
+    <div class="cards" style="margin-top: 32px;">
+        <div class="card">
+            <div class="card-num">HB</div>
+            <h3>Чернографитные</h3>
+            <p>Классическая шкала твёрдости: ровный штрих, минимум царапин по волокну.</p>
+        </div>
+        <div class="card">
+            <div class="card-num">24+</div>
+            <h3>Цветные</h3>
+            <p>Насыщенный пигмент, мягкое нанесение и предсказуемое смешение на бумаге.</p>
+        </div>
+        <div class="card">
+            <div class="card-num">Set</div>
+            <h3>Наборы</h3>
+            <p>Подарочные и учебные комплекты — защита грифеля и аккуратная укладка.</p>
+        </div>
+    </div>
+
+    <div class="page-block" style="max-width: 560px; margin-top: 48px;">
+        <p class="section-label" style="text-align: center;">Типичные характеристики</p>
+        <table class="spec-table">
+            <tbody>
+                <tr>
+                    <th>Корпус</th>
+                    <td>Древесина, лакированное покрытие</td>
+                </tr>
+                <tr>
+                    <th>Диаметр грифеля</th>
+                    <td>2 мм / 3,8 мм — по сериям</td>
+                </tr>
+                <tr>
+                    <th>Светостойкость</th>
+                    <td>По сериям — для учебы и художественной работы</td>
+                </tr>
+                <tr>
+                    <th>Упаковка</th>
+                    <td>Картон, металлические пеналы — по линейке</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div id="contacts" class="screen">
+    <p class="hero-eyebrow">Связь</p>
     <h1>Контакты</h1>
+    <p class="lead">Отдел сопровождения отвечает в будни, 10:00 — 18:00 по московскому времени.</p>
+
+    <div class="contact-box" style="margin-top: 28px;">
+        <p><strong style="color: var(--ink-soft); font-weight: 600;">Телефон</strong><br>+7 900 000 00 00</p>
+        <p><strong style="color: var(--ink-soft); font-weight: 600;">Почта</strong><br>info@pencils.ru</p>
+        <p><strong style="color: var(--ink-soft); font-weight: 600;">Адрес</strong><br>Липецк, Россия</p>
+        <div class="divider"></div>
+        <button type="button" onclick="openModal()">Написать нам</button>
+    </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal" id="modal" onclick="outsideClose(event)">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <h2>Связаться</h2>
-        <input placeholder="Имя">
-        <input placeholder="Телефон">
+</main>
 
-        <button>Отправить</button>
-        <button onclick="closeModal()" style="background:#ccc;margin-top:10px;">Закрыть</button>
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>
+            <div class="footer-brand">Карандаши</div>
+            <p class="footer-tag">Липецкая мануфактура карандашей. Спокойная эстетика и внимание к деталям — от грифеля до упаковки.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Разделы</h4>
+            <ul class="footer-links">
+                <li><a href="#" onclick="show('home'); return false;">Главная</a></li>
+                <li><a href="#" onclick="show('about'); return false;">О нас</a></li>
+                <li><a href="#" onclick="show('products'); return false;">Продукция</a></li>
+                <li><a href="#" onclick="show('contacts'); return false;">Контакты</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Соцсети</h4>
+            <div class="footer-social">
+                <a href="#" aria-label="ВКонтакте">VK</a>
+                <a href="#" aria-label="Telegram">TG</a>
+                <a href="#" aria-label="Дзен">DZ</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span>© <span id="year"></span> Липецкие карандаши. Все права защищены.</span>
+        <span><a href="#" onclick="openModal(); return false;">Политика конфиденциальности</a></span>
+    </div>
+</footer>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" onclick="outsideClose()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h2 id="modal-title">Связаться</h2>
+        <p class="modal-sub">Оставьте контакты — мы ответим в рабочее время.</p>
+        <input type="text" placeholder="Имя" autocomplete="name" aria-label="Имя">
+        <input type="tel" placeholder="Телефон" autocomplete="tel" aria-label="Телефон">
+
+        <button type="button" onclick="formThanks(this)">Отправить</button>
+        <button type="button" class="btn-secondary" onclick="closeModal()">Закрыть</button>
     </div>
 </div>
 
 <script>
-
-/* страницы */
 function show(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    setTimeout(() => document.getElementById(id).classList.add('active'), 120);
+    document.querySelectorAll('.screen').forEach(function (s) {
+        s.classList.remove('active');
+    });
+    document.querySelectorAll('.nav a').forEach(function (a) {
+        a.classList.toggle('nav-active', a.getAttribute('data-screen') === id);
+    });
+    window.scrollTo(0, 0);
+    setTimeout(function () {
+        var el = document.getElementById(id);
+        if (el) el.classList.add('active');
+    }, 120);
 }
 
-/* логотип */
-let text = " мы делаем карандаши ✏️";
-let i = 0;
-let interval;
-
-function writeText() {
-    clearInterval(interval);
-    i = 0;
-    const hint = document.getElementById("hint");
-    hint.textContent = "";
-
-    interval = setInterval(() => {
-        hint.textContent += text[i];
-        i++;
-        if (i >= text.length) clearInterval(interval);
-    }, 60);
-}
-
-function clearText() {
-    document.getElementById("hint").textContent = "";
-    clearInterval(interval);
-}
-
-/* modal */
-function openModal(e) {
-    const modal = document.getElementById("modal");
-    modal.classList.add("show");
-    createRipple(e);
+function openModal() {
+    document.getElementById('modal').classList.add('show');
+    document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-    document.getElementById("modal").classList.remove("show");
+    document.getElementById('modal').classList.remove('show');
+    document.body.style.overflow = '';
+    var sendBtn = document.querySelector('#modal .modal-content > button:first-of-type');
+    if (sendBtn) {
+        sendBtn.textContent = 'Отправить';
+        sendBtn.disabled = false;
+    }
 }
 
-function outsideClose(e) {
+function outsideClose() {
     closeModal();
 }
 
-/* ESC */
-document.addEventListener("keydown", e => {
-    if (e.key === "Escape") closeModal();
-});
-
-/* ripple эффект */
-function createRipple(e) {
-    const button = e.currentTarget;
-    const circle = document.createElement("span");
-    const rect = button.getBoundingClientRect();
-
-    circle.classList.add("ripple");
-
-    const size = Math.max(rect.width, rect.height);
-    circle.style.width = circle.style.height = size + "px";
-
-    circle.style.left = e.clientX - rect.left - size / 2 + "px";
-    circle.style.top = e.clientY - rect.top - size / 2 + "px";
-
-    button.appendChild(circle);
-
-    setTimeout(() => circle.remove(), 600);
+function formThanks(btn) {
+    var original = btn.textContent;
+    btn.textContent = 'Спасибо — мы на связи';
+    btn.disabled = true;
+    setTimeout(function () {
+        btn.textContent = original;
+        btn.disabled = false;
+        closeModal();
+    }, 1600);
 }
 
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeModal();
+});
+
+document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 
 </body>
